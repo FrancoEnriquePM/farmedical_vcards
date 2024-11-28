@@ -81,6 +81,7 @@ class Vcard
         $stmt = $this->conexion->prepare($query);
 
         // Limpiar datos
+        $this->id = htmlspecialchars(strip_tags($this->id));
         $this->nombre = htmlspecialchars(strip_tags($this->nombre));
         $this->paterno = htmlspecialchars(strip_tags($this->paterno));
         $this->materno = htmlspecialchars(strip_tags($this->materno));
@@ -89,6 +90,7 @@ class Vcard
         $this->vcard = htmlspecialchars(strip_tags($this->vcard));
 
         // Bind
+        $stmt->bindParam(":id", $this->id);
         $stmt->bindParam(":nombre", $this->nombre);
         $stmt->bindParam(":paterno", $this->paterno);
         $stmt->bindParam(":materno", $this->materno);

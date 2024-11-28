@@ -57,7 +57,7 @@ class VcardControlador
 
         try {
             // Generar el contenido vCard
-            $vcardContent = $this->generarVcard($data->nombre . ' ' . $data->paterno, $data->telefono, $data->correo);
+            $vcardContent = $this->generarVcard($data->nombre . ' ' . $data->paterno . ' ' . $data->materno, $data->telefono, $data->correo);
             // Ruta donde se guardará el archivo QR
             $qrPath = 'qr_vcards/';
             // Nombre del archivo QR
@@ -106,7 +106,7 @@ class VcardControlador
         $this->vcard->id = $data->id;
         $this->vcard->vcard = $data->vcard;
 
-        if (file_exists("qr_vcards/$data->vcard") && unlink($data->vcard)) {
+        if (file_exists("qr_vcards/$data->vcard") && unlink("qr_vcards/$data->vcard")) {
             if ($this->vcard->eliminarVcard()) {
                 echo json_encode(["message" => "Vcard eliminada."]);
             } else {
@@ -130,7 +130,7 @@ class VcardControlador
 
         try {
             // Generar el contenido vCard
-            $vcardContent = $this->generarVcard($data->nombre . ' ' . $data->paterno, $data->telefono, $data->correo);
+            $vcardContent = $this->generarVcard($data->nombre . ' ' . $data->paterno . ' ' . $data->materno, $data->telefono, $data->correo);
             // Ruta donde se guardará el archivo QR
             $qrPath = 'qr_vcards/';
             // Nombre del archivo QR
@@ -140,14 +140,14 @@ class VcardControlador
             $qrFilePath = $qrPath . $qrFileName;
             // Generar el código QR si no hay errores
             if (strpos($vcardContent, 'Error:') === false) {
-                if (file_exists("qr_vcards/$data->vcard_anterior") && unlink($data->vcard)) {
+                if (file_exists("qr_vcards/$data->vcard_anterior") && unlink("qr_vcards/$data->vcard_anterior")) {
                     // Generar el código QR
                     QRcode::png($vcardContent, $qrFilePath, QR_ECLEVEL_Q, 9, 4);
 
                     if ($this->vcard->actualizarVcard()) {
-                        echo json_encode(["message" => "Usuario actualizado."]);
+                        echo json_encode(["message" => "Vcard actualizada."]);
                     } else {
-                        echo json_encode(["message" => "No se pudo actualizar el usuario."]);
+                        echo json_encode(["message" => "No se pudo actualizar la vcard."]);
                     }
                 } else {
                     echo json_encode(["message" => "No se pudo eliminar el archivo vCard."]);
